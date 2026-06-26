@@ -1,46 +1,52 @@
-import { redirect } from 'next/navigation'
-import { cookies } from 'next/headers'
-import { createServerClient } from '@supabase/ssr'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/lib/supabase'
 import Sidebar from '@/components/Sidebar'
 
-async function getAdmin() {
-  const cookieStore = cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() { return cookieStore.getAll() },
-        setAll(cookiesToSet: { name: string; value: string; options?: Record<string, unknown> }[]) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options as never))
-          } catch {}
-        },
-      },
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
+  const [checking, setChecking] = useState(true)
+
+  useEffect(() => {
+    async function check() {
+      const { data: { session } } = await supabase.auth.getSession()
+
+      if (!session) {
+        window.location.replace('/login')
+        return
+      }
+
+      const { data: adminRows } = await supabase
+        .from('admins')
+        .select('id')
+        .eq('email', session.user.email!.toLowerCase())
+
+      if (!adminRows || adminRows.length === 0) {
+        await supabase.auth.signOut()
+        window.location.replace('/login')
+        return
+      }
+
+      setChecking(false)
     }
-  )
 
-  const { data: { session } } = await supabase.auth.getSession()
-  if (!session) return null
+    check()
+  }, [])
 
-  const { data: admin } = await supabase
-    .from('admins')
-    .select('id, email')
-    .eq('email', session.user.email)
-    .single()
-
-  return admin ? { session, admin } : null
-}
-
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const auth = await getAdmin()
-
-  if (!auth) {
-    redirect('/login')
+  if (checking) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="flex flex-col items-center gap-3">
+          <svg className="animate-spin h-8 w-8 text-green-600" viewBox="0 0 24 24" fill="none">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z" />
+          </svg>
+          <p className="text-sm text-gray-500">Vérification de la session...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -51,4 +57,8 @@ export default async function DashboardLayout({
       </main>
     </div>
   )
+}
+
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  return <AuthGuard>{children}</AuthGuard>
 }
