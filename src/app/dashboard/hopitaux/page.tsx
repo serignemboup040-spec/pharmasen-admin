@@ -81,7 +81,7 @@ export default function HopitauxPage() {
               </Tr>
             ))}
             {hopitaux.length === 0 && (
-              <Tr><Td className="text-center text-gray-400 py-8" colSpan={6 as any}>Aucun hôpital</Td></Tr>
+              <Tr><Td className="text-center text-gray-400 py-8" colSpan={6}>Aucun hôpital</Td></Tr>
             )}
           </Tbody>
         </Table>

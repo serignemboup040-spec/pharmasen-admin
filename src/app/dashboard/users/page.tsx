@@ -36,7 +36,7 @@ export default async function UsersPage() {
         <Tbody>
           {users.length === 0 && (
             <Tr>
-              <Td className="text-center text-gray-400 py-8" colSpan={4 as any}>
+              <Td className="text-center text-gray-400 py-8" colSpan={4}>
                 Aucun utilisateur
               </Td>
             </Tr>

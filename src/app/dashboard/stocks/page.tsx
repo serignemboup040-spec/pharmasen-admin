@@ -9,8 +9,8 @@ import type { StockPharmacie, Pharmacie, Medicament } from '@/types'
 
 export default function StocksPage() {
   const [stocks, setStocks] = useState<StockPharmacie[]>([])
-  const [pharmacies, setPharmacies] = useState<Pharmacie[]>([])
-  const [medicaments, setMedicaments] = useState<Medicament[]>([])
+  const [pharmacies, setPharmacies] = useState<Pick<Pharmacie, 'id' | 'nom'>[]>([])
+  const [medicaments, setMedicaments] = useState<Pick<Medicament, 'id' | 'nom' | 'forme'>[]>([])
   const [selectedPharmacie, setSelectedPharmacie] = useState('')
   const [loading, setLoading] = useState(true)
   const [modalOpen, setModalOpen] = useState(false)
@@ -100,7 +100,7 @@ export default function StocksPage() {
               </Tr>
             ))}
             {stocks.length === 0 && (
-              <Tr><Td className="text-center text-gray-400 py-8" colSpan={7 as any}>Aucun stock trouvé</Td></Tr>
+              <Tr><Td className="text-center text-gray-400 py-8" colSpan={7}>Aucun stock trouvé</Td></Tr>
             )}
           </Tbody>
         </Table>

@@ -36,6 +36,6 @@ export function Tr({
   return <tr className={`hover:bg-gray-50 transition-colors ${className}`}>{children}</tr>
 }
 
-export function Td({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <td className={`px-4 py-3 text-gray-700 ${className}`}>{children}</td>
+export function Td({ children, className = '', colSpan }: { children: React.ReactNode; className?: string; colSpan?: number }) {
+  return <td colSpan={colSpan} className={`px-4 py-3 text-gray-700 ${className}`}>{children}</td>
 }

@@ -70,7 +70,7 @@ export default function UrgencesPage() {
               </Tr>
             ))}
             {urgences.length === 0 && (
-              <Tr><Td className="text-center text-gray-400 py-8" colSpan={5 as any}>Aucun numéro d'urgence</Td></Tr>
+              <Tr><Td className="text-center text-gray-400 py-8" colSpan={5}>Aucun numéro d'urgence</Td></Tr>
             )}
           </Tbody>
         </Table>

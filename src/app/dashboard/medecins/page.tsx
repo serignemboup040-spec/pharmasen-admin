@@ -90,7 +90,7 @@ export default function MedecinsPage() {
               </Tr>
             ))}
             {medecins.length === 0 && (
-              <Tr><Td className="text-center text-gray-400 py-8" colSpan={6 as any}>Aucun médecin</Td></Tr>
+              <Tr><Td className="text-center text-gray-400 py-8" colSpan={6}>Aucun médecin</Td></Tr>
             )}
           </Tbody>
         </Table>
