@@ -80,8 +80,7 @@ export default function LoginPage() {
     }
 
     console.log('[LOGIN] Admin vérifié ✓ — redirection vers /dashboard')
-    router.push('/dashboard')
-    router.refresh()
+    window.location.href = '/dashboard'
   }
 
   return (
